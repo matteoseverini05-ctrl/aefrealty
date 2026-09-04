@@ -680,14 +680,18 @@ footer.site {
 @media(max-width:900px){.deal{grid-template-columns:1fr}}
 
 
-/* v13: city label on hero slides */
+/* v14: city label top-left, mirroring the page counter; slides advance on click */
 .slide .slide-city{
-  position:absolute; right:clamp(1.4rem,4vw,4rem); bottom:4.6rem; z-index:3;
-  font-size:.72rem; letter-spacing:.42em; text-transform:uppercase;
+  position:absolute; z-index:3;
+  top:calc(var(--header-h) + 3rem);
+  left:max(32px, calc((100% - 1240px)/2 + 32px));
+  font-size:.78rem; letter-spacing:.42em; text-transform:uppercase;
   color:rgba(255,255,255,.85);
   display:flex; align-items:center; gap:.7rem;
   opacity:0; transition:opacity .8s ease .4s;
 }
 .slide .slide-city::before{content:""; width:26px; height:1px; background:rgba(255,255,255,.6)}
 .slide.active .slide-city{opacity:1}
-@media(max-width:700px){ .slide .slide-city{ bottom:6.6rem } }
+.hero-slider .slide.active{cursor:pointer}
+.hero-slider .slide.active a, .hero-slider .slide.active button{cursor:pointer}
+@media(max-width:700px){ .slide .slide-city{ top:calc(var(--header-h) + 1.6rem) } }

@@ -131,6 +131,11 @@
       if (!reduced) timer = setTimeout(function () { go(idx + 1); }, SLIDE_MS);
     }
     dots.forEach(function (d, i) { d.addEventListener('click', function () { go(i); }); });
+    /* click on the image advances to the next city immediately */
+    slider.addEventListener('click', function (e) {
+      if (e.target.closest('a, button, .dots, .hero-ui')) return;
+      go(idx + 1);
+    });
     go(0);
   }
 
