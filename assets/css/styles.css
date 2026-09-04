@@ -678,3 +678,16 @@ footer.site {
 .deal p{line-height:1.8;color:#3a4152;margin-bottom:1.6rem;max-width:60ch}
 .deal .glance-row .v{text-align:right}
 @media(max-width:900px){.deal{grid-template-columns:1fr}}
+
+
+/* v13: city label on hero slides */
+.slide .slide-city{
+  position:absolute; right:clamp(1.4rem,4vw,4rem); bottom:4.6rem; z-index:3;
+  font-size:.72rem; letter-spacing:.42em; text-transform:uppercase;
+  color:rgba(255,255,255,.85);
+  display:flex; align-items:center; gap:.7rem;
+  opacity:0; transition:opacity .8s ease .4s;
+}
+.slide .slide-city::before{content:""; width:26px; height:1px; background:rgba(255,255,255,.6)}
+.slide.active .slide-city{opacity:1}
+@media(max-width:700px){ .slide .slide-city{ bottom:6.6rem } }
