@@ -37,27 +37,11 @@
     <changefreq>monthly</changefreq>
   </url>
   <url>
-    <loc>https://aefrealty.co.uk/insights/</loc>
-    <changefreq>monthly</changefreq>
-  </url>
-  <url>
     <loc>https://aefrealty.co.uk/contact/</loc>
     <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://aefrealty.co.uk/privacy/</loc>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://aefrealty.co.uk/insights/owning-the-whole-life-cycle/</loc>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://aefrealty.co.uk/insights/discipline-in-a-repricing-market/</loc>
-    <changefreq>yearly</changefreq>
-  </url>
-  <url>
-    <loc>https://aefrealty.co.uk/insights/credit-with-property-underneath/</loc>
     <changefreq>yearly</changefreq>
   </url>
 </urlset>
