@@ -139,14 +139,17 @@
     go(0);
   }
 
-  /* parallax on hero media */
+  /* parallax on hero media — base scale applied at load (no jump), zoom grows gently with scroll */
   if (!reduced) {
     var pm = document.querySelectorAll('.page-hero .media');
     if (pm.length) {
-      window.addEventListener('scroll', function () {
+      var heroParallax = function () {
         var y = window.scrollY;
-        pm.forEach(function (m) { m.style.transform = 'translateY(' + y * 0.18 + 'px) scale(1.06)'; });
-      }, { passive: true });
+        var s = 1.06 + Math.min(y * 0.00008, 0.05);
+        pm.forEach(function (m) { m.style.transform = 'translateY(' + y * 0.18 + 'px) scale(' + s.toFixed(4) + ')'; });
+      };
+      window.addEventListener('scroll', heroParallax, { passive: true });
+      heroParallax();
     }
   }
 
