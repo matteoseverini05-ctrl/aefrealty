@@ -695,3 +695,25 @@ footer.site {
 .hero-slider .slide.active{cursor:pointer}
 .hero-slider .slide.active a, .hero-slider .slide.active button{cursor:pointer}
 @media(max-width:700px){ .slide .slide-city{ top:calc(var(--header-h) + 1.6rem) } }
+
+/* mailto fallback toast */
+.mail-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 34px;
+  transform: translate(-50%, 14px);
+  background: var(--navy);
+  color: #fff;
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  padding: 0.9rem 1.5rem;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  z-index: 400;
+  box-shadow: 0 12px 32px rgba(14, 42, 82, 0.28);
+  max-width: calc(100vw - 40px);
+  text-align: center;
+}
+.mail-toast.show { opacity: 1; transform: translate(-50%, 0); }

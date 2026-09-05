@@ -170,6 +170,37 @@
     });
   }
 
+  /* mailto fallback: copy the address and, if no mail app takes over, say so */
+  var mailtos = document.querySelectorAll('a[href^="mailto:"]');
+  if (mailtos.length) {
+    var toast = document.createElement('div');
+    toast.className = 'mail-toast';
+    document.body.appendChild(toast);
+    var toastTimer = null;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3600);
+    }
+    mailtos.forEach(function (a) {
+      a.addEventListener('click', function () {
+        var addr = (a.getAttribute('href') || '').replace(/^mailto:/, '').split('?')[0];
+        if (!addr) return;
+        var copied = false;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(addr).then(function () { copied = true; }, function () {});
+        }
+        /* if a mail client (or webmail tab) opened, the page loses focus — stay quiet then */
+        setTimeout(function () {
+          if (document.hasFocus() && !document.hidden) {
+            showToast(copied ? addr + ' — address copied to your clipboard' : addr);
+          }
+        }, 650);
+      });
+    });
+  }
+
   /* active nav item */
   var path = window.location.pathname;
   document.querySelectorAll('nav.main a.top').forEach(function (a) {
