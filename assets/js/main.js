@@ -109,7 +109,7 @@
     var slides = slider.querySelectorAll('.slide');
     var dots = slider.querySelectorAll('.dots button');
     var count = slider.querySelector('.hero-count');
-    var SLIDE_MS = 8000;
+    var SLIDE_MS = 4000;
     slider.style.setProperty('--slide-ms', SLIDE_MS + 'ms');
     var idx = 0;
     var timer = null;

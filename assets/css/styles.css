@@ -264,7 +264,7 @@ body.menu-open .mobile-menu a.mm { opacity: 1; transform: none; }
   background-position: center;
   transform: scale(1);
 }
-.slide.active .media { animation: kenburns 9s ease-out forwards; }
+.slide.active .media { animation: kenburns 5s ease-out forwards; }
 @keyframes kenburns { from { transform: scale(1); } to { transform: scale(1.07); } }
 .slide::after {
   content: '';
