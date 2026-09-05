@@ -170,34 +170,89 @@
     });
   }
 
-  /* mailto fallback: copy the address and, if no mail app takes over, say so */
+  /* "write to" chooser: a mailto: link depends on the visitor's device having a mail app set up,
+     which many people (Gmail-in-the-browser users above all) do not — so offer the ways explicitly */
   var mailtos = document.querySelectorAll('a[href^="mailto:"]');
   if (mailtos.length) {
-    var toast = document.createElement('div');
-    toast.className = 'mail-toast';
-    document.body.appendChild(toast);
-    var toastTimer = null;
-    function showToast(msg) {
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 3600);
+    var pick = document.createElement('div');
+    pick.className = 'mailpick';
+    pick.setAttribute('role', 'dialog');
+    pick.setAttribute('aria-modal', 'true');
+    pick.setAttribute('aria-label', 'Write to the firm');
+    pick.innerHTML =
+      '<div class="mp-panel">' +
+        '<button class="mp-close" type="button" aria-label="Close">&times;</button>' +
+        '<div class="mp-eyebrow">write to the firm</div>' +
+        '<div class="mp-addr"></div>' +
+        '<div class="mp-opts">' +
+          '<a class="mp-opt" data-mp="gmail" target="_blank" rel="noopener">Open in Gmail <span class="arr">→</span></a>' +
+          '<a class="mp-opt" data-mp="outlook" target="_blank" rel="noopener">Open in Outlook <span class="arr">→</span></a>' +
+          '<a class="mp-opt" data-mp="app">Use my mail app <span class="arr">→</span></a>' +
+          '<button class="mp-opt" data-mp="copy" type="button"><span class="mp-copy-label">Copy the address</span> <span class="arr">⧉</span></button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(pick);
+    var mpPanel = pick.querySelector('.mp-panel');
+    mpPanel.setAttribute('tabindex', '-1');
+    var mpAddr = pick.querySelector('.mp-addr');
+    var mpGmail = pick.querySelector('[data-mp="gmail"]');
+    var mpOutlook = pick.querySelector('[data-mp="outlook"]');
+    var mpApp = pick.querySelector('[data-mp="app"]');
+    var mpCopy = pick.querySelector('[data-mp="copy"]');
+    var mpCopyLabel = pick.querySelector('.mp-copy-label');
+    var mpLastFocus = null;
+    var mpCurrent = '';
+
+    function openPick(addr, subject) {
+      var enc = encodeURIComponent;
+      mpCurrent = addr;
+      mpAddr.textContent = addr;
+      mpGmail.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + enc(addr) + (subject ? '&su=' + enc(subject) : '');
+      mpOutlook.href = 'https://outlook.office.com/mail/deeplink/compose?to=' + enc(addr) + (subject ? '&subject=' + enc(subject) : '');
+      mpApp.href = 'mailto:' + addr + (subject ? '?subject=' + enc(subject) : '');
+      mpCopyLabel.textContent = 'Copy the address';
+      mpLastFocus = document.activeElement;
+      pick.classList.add('open');
+      document.body.classList.add('mailpick-open');
+      setTimeout(function () { mpPanel.focus(); }, 40);
     }
+    function closePick() {
+      pick.classList.remove('open');
+      document.body.classList.remove('mailpick-open');
+      if (mpLastFocus && mpLastFocus.focus) mpLastFocus.focus();
+    }
+
     mailtos.forEach(function (a) {
-      a.addEventListener('click', function () {
-        var addr = (a.getAttribute('href') || '').replace(/^mailto:/, '').split('?')[0];
+      a.addEventListener('click', function (e) {
+        var href = a.getAttribute('href') || '';
+        var addr = href.replace(/^mailto:/, '').split('?')[0];
         if (!addr) return;
-        var copied = false;
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(addr).then(function () { copied = true; }, function () {});
-        }
-        /* if a mail client (or webmail tab) opened, the page loses focus — stay quiet then */
-        setTimeout(function () {
-          if (document.hasFocus() && !document.hidden) {
-            showToast(copied ? addr + ' — address copied to your clipboard' : addr);
-          }
-        }, 650);
+        e.preventDefault();
+        var subject = '';
+        var m = href.match(/[?&]subject=([^&]*)/);
+        if (m) { try { subject = decodeURIComponent(m[1].replace(/\+/g, ' ')); } catch (err) { subject = ''; } }
+        openPick(addr, subject);
       });
+    });
+
+    pick.querySelector('.mp-close').addEventListener('click', closePick);
+    pick.addEventListener('click', function (e) { if (e.target === pick) closePick(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && pick.classList.contains('open')) closePick();
+    });
+    mpGmail.addEventListener('click', function () { setTimeout(closePick, 150); });
+    mpOutlook.addEventListener('click', function () { setTimeout(closePick, 150); });
+    mpApp.addEventListener('click', function () { setTimeout(closePick, 400); });
+    mpCopy.addEventListener('click', function () {
+      function done(ok) {
+        mpCopyLabel.textContent = ok ? 'Copied — ' + mpCurrent : mpCurrent;
+        setTimeout(closePick, 1400);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(mpCurrent).then(function () { done(true); }, function () { done(false); });
+      } else {
+        done(false);
+      }
     });
   }
 
