@@ -596,7 +596,7 @@ footer.site {
   color: #fff;
   padding: 5rem 0 2.6rem;
 }
-.f-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 3rem; padding-bottom: 3.5rem; }
+.f-top { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 3rem; padding-bottom: 3.5rem; }
 .f-brand img { height: 40px; margin-bottom: 1.4rem; }
 .f-brand p { color: rgba(255, 255, 255, .62); font-size: .9rem; max-width: 30ch; }
 .f-col .fk { font-size: .72rem; letter-spacing: .34em; color: rgba(255, 255, 255, .45); margin-bottom: 1.2rem; }
@@ -769,3 +769,6 @@ body.mailpick-open { overflow: hidden; }
   .mp-panel { padding: 2.2rem 1.6rem 1.6rem; }
   .mp-addr { font-size: 1.4rem; }
 }
+
+/* image caption under alt-row media */
+.a-cap { font-size: .7rem; letter-spacing: .22em; color: var(--muted); margin-top: .9rem; }
